@@ -7,6 +7,9 @@ int max(int a,int b){if(a>=b)return a;else return b;}
 #include "Excepciones.h"
 #include <iostream>
 #include <fstream>
+#include "Lista.h"
+#include <cassert>
+
 using namespace std;
 
 
@@ -77,6 +80,21 @@ public:
       }
       return *this;
    }
+
+   Lista<Clave> inorden() const {
+		Lista<Clave> ret;
+		inordenAcu(raiz, ret);
+		return ret;
+	}
+
+   static void inordenAcu(Nodo *ra, Lista<Clave> &acu) {
+		if (ra == NULL)
+			return;
+
+		inordenAcu(ra->iz, acu);
+		acu.ponDr(ra->clave);
+		inordenAcu(ra->dr, acu);
+	}
 
 protected:
 
