@@ -26,5 +26,8 @@
     <ClInclude Include="TADs-EDA\Lista.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="TADs-EDA\DCola.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

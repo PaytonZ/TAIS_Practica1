@@ -9,6 +9,7 @@ int max(int a,int b){if(a>=b)return a;else return b;}
 #include <fstream>
 #include "Lista.h"
 #include <cassert>
+#include "DCola.h"
 
 using namespace std;
 
@@ -27,8 +28,9 @@ private:
       Nodo *iz;
       Nodo *dr;
       int altura;
-      Nodo(const Clave& c, const Valor& v, Nodo* i=NULL, Nodo* d=NULL, int alt=1)
-      : clave(c), valor(v), iz(i), dr(d), altura(alt) {}
+	  int tam_i;
+      Nodo(const Clave& c, const Valor& v, Nodo* i=NULL, Nodo* d=NULL, int alt=1, int tam=1)
+      : clave(c), valor(v), iz(i), dr(d), altura(alt), tam_i(tam) {}
    };
 
 
@@ -44,6 +46,7 @@ public:
 
    void inserta(const Clave &c, const Valor &v) {
       inserta(c, v, raiz);
+	  assert(es_avl_correcto(raiz));
    }
 
    bool esVacio() const {
@@ -96,6 +99,30 @@ public:
 		inordenAcu(ra->dr, acu);
 	}
 
+    
+
+   Clave kesimaMenorClave(int i)
+ {
+		
+		Nodo *ra = raiz;
+        int cuenta=i;
+		    
+        while(ra != NULL)
+        {
+            if (tam_i(ra->iz)+1 == cuenta)      return ra->clave;
+            else if (tam_i(ra->iz) < cuenta)
+            {
+               ra = ra->dr;
+                cuenta = cuenta - (tam_i(ra->iz)+1);
+            }
+            else
+            {
+                ra= ra->iz;
+            }
+
+	 }
+}
+
 protected:
 
    void libera(){
@@ -106,15 +133,34 @@ protected:
       copia(raiz,a.raiz);
    }
 
-private:
+  
 
-   /**
+private:
+	  /**
     Puntero a la raiz de la estructura jerarquica de nodos.
     */
    Nodo* raiz;
 
+  
 
-   static void libera(Nodo* a){
+	bool es_avl_correcto(Nodo *ra) {
+
+	   if(ra==NULL) return true;
+	   
+	   return (es_avl_correcto(ra->dr) && es_avl_correcto(ra->iz) && ( abs(altura(ra->iz) - altura(ra->dr)) <=1 ) && (altura(ra) == calculaAltura(ra)) );
+	   }
+
+
+	 int calculaAltura(Nodo *ra)
+	{
+		int altizq=0, altder=0;
+		if (ra==NULL) return 0;
+		if (ra->iz!=NULL) altizq= calculaAltura(ra->iz);
+		if (ra->dr != NULL) altizq= calculaAltura(ra->dr);
+
+		return int(max(altizq,altder)+1);
+	}
+		   static void libera(Nodo* a){
       if (a != NULL){
          libera(a->iz);
          libera(a->dr);
@@ -128,7 +174,7 @@ private:
          Nodo* iz, *dr;
          copia(iz,b->iz);
          copia(dr,b->dr);
-         a = new Nodo(b->clave,b->valor,iz,dr,max(altura(iz),altura(dr))+1);
+         a = new Nodo(b->clave,b->valor,iz,dr,max(altura(iz),altura(dr))+1,tam_i(iz)+1);
       }
    }
 
@@ -148,6 +194,11 @@ private:
       else return a->altura;
    }
 
+     static int tam_i(Nodo* a){
+      if (a==NULL) return 0;
+      else return a->tam_i;
+   }
+
    static void inserta(const Clave& c, const Valor& v, Nodo*& a){
       if (a == NULL) {
          a = new Nodo(c,v);
@@ -155,6 +206,7 @@ private:
          a->valor = v;
       } else if (c < a->clave) {
          inserta(c, v, a->iz);
+		 a->tam_i++;
          reequilibraDer(a);
       } else { // c > a->clave
          inserta(c, v, a->dr);
@@ -165,7 +217,10 @@ private:
 
    static void rotaDer(Nodo*& k2){
       Nodo* k1 = k2->iz;
-      k2->iz = k1->dr;
+
+	   k2->iz = k1->dr;
+	
+
       k1->dr = k2;
       k2->altura = max(altura(k2->iz),altura(k2->dr))+1;
       k1->altura = max(altura(k1->iz),altura(k1->dr))+1;
@@ -174,10 +229,16 @@ private:
 
    static void rotaIzq(Nodo*& k1){
       Nodo* k2 = k1->dr;
+
+
       k1->dr = k2->iz;
+	 
+
       k2->iz = k1;
       k1->altura = max(altura(k1->iz),altura(k1->dr))+1;
       k2->altura = max(altura(k2->iz),altura(k2->dr))+1;
+
+
       k1=k2;
    }
 
