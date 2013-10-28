@@ -11,11 +11,12 @@ int main()
 	AVL <int,int>arbol;
 
 	arbol.inserta(10,0);
+		arbol.inserta(40,0);
 arbol.inserta(100,0);
 arbol.inserta(30,0);
 arbol.inserta(80,0);
 arbol.inserta(50,0);
-arbol.inserta(20,0);
+//arbol.inserta(20,0);
 cout << arbol;
 
 cout << arbol.kesimaMenorClave(1) << endl;
@@ -23,6 +24,8 @@ cout << arbol.kesimaMenorClave(2)  << endl;
 cout << arbol.kesimaMenorClave(3)  << endl;
 cout << arbol.kesimaMenorClave(4)  << endl;
 cout << arbol.kesimaMenorClave(5)  << endl;
+cout << arbol.kesimaMenorClave(6)  << endl;
+
 
 
 

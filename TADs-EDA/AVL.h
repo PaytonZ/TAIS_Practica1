@@ -46,7 +46,7 @@ public:
 
    void inserta(const Clave &c, const Valor &v) {
       inserta(c, v, raiz);
-	  assert(es_avl_correcto(raiz));
+	 // assert(es_avl_correcto(raiz));
    }
 
    bool esVacio() const {
@@ -109,11 +109,15 @@ public:
 		    
         while(ra != NULL)
         {
-            if (tam_i(ra->iz)+1 == cuenta)      return ra->clave;
-            else if (tam_i(ra->iz) < cuenta)
+			int tam_izquierda= tam_i(ra->iz);
+            if (tam_izquierda == cuenta)    
+			{
+					return ra->clave;
+			}
+            else if (tam_izquierda < cuenta)
             {
                ra = ra->dr;
-                cuenta = cuenta - (tam_i(ra->iz)+1);
+                cuenta -= tam_izquierda+1;
             }
             else
             {
@@ -122,6 +126,10 @@ public:
 
 	 }
 }
+
+  
+
+ 
 
 protected:
 
@@ -140,7 +148,9 @@ private:
     Puntero a la raiz de la estructura jerarquica de nodos.
     */
    Nodo* raiz;
-
+     
+   
+  
   
 
 	bool es_avl_correcto(Nodo *ra) {
@@ -158,9 +168,11 @@ private:
 		if (ra->iz!=NULL) altizq= calculaAltura(ra->iz);
 		if (ra->dr != NULL) altizq= calculaAltura(ra->dr);
 
-		return int(max(altizq,altder)+1);
+		return max(altizq,altder)+1;
 	}
-		   static void libera(Nodo* a){
+	
+	
+   static void libera(Nodo* a){
       if (a != NULL){
          libera(a->iz);
          libera(a->dr);
@@ -218,6 +230,8 @@ private:
    static void rotaDer(Nodo*& k2){
       Nodo* k1 = k2->iz;
 
+	  k2->tam_i -= tam_i(k1); 
+
 	   k2->iz = k1->dr;
 	
 
@@ -229,6 +243,7 @@ private:
 
    static void rotaIzq(Nodo*& k1){
       Nodo* k2 = k1->dr;
+	  k2->tam_i += tam_i(k1);
 
 
       k1->dr = k2->iz;
