@@ -46,7 +46,7 @@ public:
 
    void inserta(const Clave &c, const Valor &v) {
       inserta(c, v, raiz);
-	 // assert(es_avl_correcto(raiz));
+	 assert(es_avl_correcto(raiz));
    }
 
    bool esVacio() const {
@@ -109,15 +109,15 @@ public:
 		    
         while(ra != NULL)
         {
-			int tam_izquierda= tam_i(ra->iz);
-            if (tam_izquierda == cuenta)    
+			int tam_= tam_i(ra);
+            if (tam_ == cuenta)    
 			{
 					return ra->clave;
 			}
-            else if (tam_izquierda < cuenta)
+            else if (tam_ < cuenta)
             {
                ra = ra->dr;
-                cuenta -= tam_izquierda+1;
+                cuenta -= tam_;
             }
             else
             {
@@ -164,7 +164,7 @@ private:
 	 int calculaAltura(Nodo *ra)
 	{
 		int altizq=0, altder=0;
-		if (ra==NULL) return 0;
+		//if (ra==NULL) return 0;
 		if (ra->iz!=NULL) altizq= calculaAltura(ra->iz);
 		if (ra->dr != NULL) altizq= calculaAltura(ra->dr);
 
