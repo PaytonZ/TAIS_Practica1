@@ -99,35 +99,29 @@ public:
 		inordenAcu(ra->dr, acu);
 	}
 
-	void inorden_rango(Nodo *n,Lista<Clave> &acu,const Clave &k1,const Clave &k2) const
+	void rangoAux(const Nodo *n , Lista<Clave> &lista , const Clave &k1 , const Clave &k2) const
 	{
-		if (n == NULL)
-			return;
-
-		if(k1 < n->clave)
-		inorden_rango(n->iz,acu,k1,k2);
-
-		acu.ponDr(n->clave);
-
-		if(k1 < n->clave)
-		inorden_rango(n->dr, acu,k1,k2);
-
-
+		if(n==NULL) return ;
+		if(n->clave < k1) rangoAux(n->dr,lista,k1,k2);
+		else if(n->clave > k2) rangoAux(n->iz,lista,k1,k2);
+		else if(n->clave >= k1 && n->clave <=k2)
+		{
+			if(n->clave != k1 ) 
+				rangoAux(n->iz,lista,k1,k2);
+			lista.ponDr(n->clave);
+			if(n->clave != k2 ) rangoAux(n->dr,lista,k1,k2);
+		}
 	}
 
 	Lista<Clave> rango(const Clave& k1, const Clave& k2) const
 	{
 		Lista<Clave> lista;
 		
-		inorden_rango(raiz,lista,k1,k2);
+	
 
-		/*cout << "k1 --- " << k1 ;
-		if (n!=NULL)
-		cout << " ----" <<  n->clave << endl;
-		else
-		{
-			cout << "NULL!" << endl;
-		}*/
+		rangoAux(raiz,lista,k1,k2);
+
+		
 		return lista;
 	}
 
