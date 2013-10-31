@@ -90,7 +90,7 @@ public:
 		return ret;
 	}
 
-	static void inordenAcu(Nodo *ra, Lista<Clave> &acu) {
+	void inordenAcu(Nodo *ra, Lista<Clave> &acu) {
 		if (ra == NULL)
 			return;
 
@@ -99,9 +99,50 @@ public:
 		inordenAcu(ra->dr, acu);
 	}
 
+	void inorden_rango(Nodo *n,Lista<Clave> &acu,const Clave &k1,const Clave &k2) const
+	{
+		if (n == NULL)
+			return;
+
+		if(k1 < n->clave)
+		inorden_rango(n->iz,acu,k1,k2);
+
+		acu.ponDr(n->clave);
+
+		if(k1 < n->clave)
+		inorden_rango(n->dr, acu,k1,k2);
 
 
-	Clave kesimaMenorClave(int i)
+	}
+
+	Lista<Clave> rango(const Clave& k1, const Clave& k2) const
+	{
+		Lista<Clave> lista;
+		
+		inorden_rango(raiz,lista,k1,k2);
+
+		/*cout << "k1 --- " << k1 ;
+		if (n!=NULL)
+		cout << " ----" <<  n->clave << endl;
+		else
+		{
+			cout << "NULL!" << endl;
+		}*/
+		return lista;
+	}
+
+	
+
+	Nodo* buscaNodo(Nodo *n,const Clave& k1) const
+	{
+		if (n==NULL) return NULL;
+		else if(n->clave == k1) return n;
+		else if (n->clave > k1 ) return buscaNodo(n->iz,k1);
+		else return buscaNodo(n->dr,k1);
+
+	}
+
+	Clave kesimaMenorClave(int i) const
 	{
 
 		Nodo *ra = raiz;
@@ -126,7 +167,7 @@ public:
 
 		}
 	}
-	bool es_avl_correcto(Nodo* n)
+	bool es_avl_correcto(Nodo* n) const
 	{
 		int alt;
 		return es_avl_correcto(n,alt);
@@ -155,30 +196,8 @@ private:
 
 
 
-	/*
 
-	bool es_avl_correcto(Nodo *ra) {
-
-	if(ra==NULL) return true;
-
-	return (es_avl_correcto(ra->dr) && es_avl_correcto(ra->iz) && ( abs(altura(ra->iz) - altura(ra->dr)) <=1 ) && (altura(ra) == calculaAltura(ra)) );
-	}
-
-
-	int calculaAltura(Nodo *ra)
-	{
-	int altizq=0, altder=0;
-	//if (ra==NULL) return 0;
-	if (ra->iz!=NULL) altizq= calculaAltura(ra->iz);
-	if (ra->dr != NULL) altizq= calculaAltura(ra->dr);
-
-	return max(altizq,altder)+1;
-	}
-	*/
-
-
-
-	bool es_avl_correcto(Nodo* n, int& altura)
+	bool es_avl_correcto(Nodo* n, int& altura) const
 	{
 		if(n==NULL) {
 			altura=0;
@@ -188,6 +207,7 @@ private:
 		{
 			int iz,dr;
 			bool equ = es_avl_correcto(n->iz,iz) && es_avl_correcto(n->dr,dr) && abs(iz-dr) <= 1 ;
+
 			altura = max(iz,dr) + 1;
 			return equ;
 

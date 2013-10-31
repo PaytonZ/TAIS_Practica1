@@ -17,29 +17,38 @@ arbol.inserta(30,0);
 arbol.inserta(80,0);
 arbol.inserta(50,0);
 //arbol.inserta(20,0);
-cout << arbol;
+cout << "inicio TODO EL ARBOL" << endl;
+Lista<int> clave = arbol.rango(INT_MIN,INT_MAX);
+for(Lista<int>::Iterador it=clave.principio() ; it != clave.final() ; it.avanza())
+{
+	cout << it.elem() << endl;
+}
+cout << "FIN TODO EL ARBOL" << endl;
 
-cout << arbol.kesimaMenorClave(1) << endl;
-cout << arbol.kesimaMenorClave(2)  << endl;
-cout << arbol.kesimaMenorClave(3)  << endl;
-cout << arbol.kesimaMenorClave(4)  << endl;
-cout << arbol.kesimaMenorClave(5)  << endl;
-cout << arbol.kesimaMenorClave(6)  << endl;
+cout << "------10---20-----" << endl;
+
+clave = arbol.rango(10,20);
+
+for(Lista<int>::Iterador it=clave.principio() ; it != clave.final() ; it.avanza())
+{
+	cout << it.elem() << endl;
+}
+cout << "------15------20--" << endl;
+clave = arbol.rango(15,20);
 
 
-
+clave = arbol.rango(20,20);
+clave = arbol.rango(30,20);
+clave = arbol.rango(10,100);
 
 /*
-Lista<int> z=arbol.inorden();
-
-Lista<int>::Iterador it = z.principio();
-while( it != z.final())
+cout << "--10---------100---" << endl;
+for(Lista<int>::Iterador it=clave.principio() ; it != clave.final() ; it.avanza())
 {
-	int a=it.elem();
-	cout << a << endl;
-	it.avanza();
+	cout << it.elem() << endl;
 }
 */
+
 
 
 
